@@ -1,0 +1,88 @@
+import random
+import csv
+
+
+print("Welcome to the Shahzain learning machine 3.0\n")
+print("Read this and create your own story:\n")
+
+name = input("Enter your name: ")
+class_name = input("Enter your class name please: ")
+
+story_templates = {
+    1: "On Eid day, I wore a ___ and ___ to the masjid. After salah, we ate ___ and ___, played till ___ with ___, until we went to ___!",
+    2: "I flew in a ___ with ___ to ___. There, I found a ___. We also looked at ___. It was going to ___ us. But with the power of me, we were ___!",
+    3: "My ___ ___ flew onto the ___ and ___ onto it. Then it found a ___ and a ___ in the room. Then he flew to the ___!",
+    4: "I tried making a ___ for ___. First, I ___ into the kitchen and grabbed a ___. Then I accidentally ___ the ___ too hard, and because of me everything ___!",
+    5: f"Today I saw a ___ and a ___ at the ___. It ___, then jumped on a ___ and ___ ___!"
+}
+
+number = random.randint(1, 5)
+print(f"\nStory number: {number}")
+print("Here is your story template:\n")
+print(story_templates[number])
+
+blanks = {
+    1: input("\nEnter a noun: "),
+    2: input("Enter another noun: "),
+    3: input("Enter a place: "),
+    4: input("Enter a verb (past tense): "),
+    5: input("Enter a vehicle or thing: "),
+    6: input("Enter another verb: "),
+    7: input("Enter an exclamation or final action: ")
+}
+
+# Function to build the story
+def build_story(num, blanks):
+    stories = {
+        1: f"On Eid day, I wore a {blanks[1]} and {blanks[2]} to the masjid. After salah, we ate {blanks[3]} and {blanks[4]}, played till {blanks[5]} with {blanks[6]}, until we went to {blanks[7]}!",
+        2: f"I flew in a {blanks[1]} with {blanks[2]} to {blanks[3]}. There, I found a {blanks[4]}. We also looked at {blanks[5]}. It was going to {blanks[6]} us. But with the power of me, we were {blanks[7]}!",
+        3: f"My {blanks[1]} {blanks[2]} flew onto the {blanks[3]} and {blanks[4]} onto it. Then it found a {blanks[5]} and a {blanks[6]} in the room. Then he flew to the {blanks[7]}!",
+        4: f"I tried making a {blanks[1]} for {blanks[2]}. First, I {blanks[3]} into the kitchen and grabbed a {blanks[4]}. Then I accidentally {blanks[5]} the {blanks[6]} too hard, and because of me everything {blanks[7]}!",
+        5: f"Today I saw a {blanks[1]} and a {blanks[2]} at the {blanks[3]}. It {blanks[4]}, then jumped on a {blanks[5]} and {blanks[6]} {blanks[7]}!"
+    }
+    return stories[num]
+
+while True:
+    story = build_story(number, blanks)
+    print("\n✨ Your Completed Story:")
+    print(story)
+    print(f"\nBy: {name}")
+
+    change = input("\nDo you want to change your story? (yes/no): ").strip().lower()
+
+    if change == "no":
+        break
+    elif change == "yes":
+        print("\nWhich blank do you want to change? (1–7) or 'all' to redo everything:")
+        print("1 = noun | 2 = another noun | 3 = place | 4 = verb (past tense)")
+        print("5 = vehicle/thing | 6 = another verb | 7 = exclamation/final action")
+
+        choice = input("Enter your choice: ").strip().lower()
+
+        if choice == "all":
+            for i in blanks:
+                blanks[i] = input(f"Enter new value for blank {i}: ")
+        elif choice.isdigit() and 1 <= int(choice) <= 7:
+            i = int(choice)
+            blanks[i] = input(f"Enter new value for blank {i}: ")
+        else:
+            print("Invalid choice. Please enter 1–7 or 'all'.")
+    else:
+        print("Please type 'yes' or 'no'.")
+
+filename = "Shahzain's learning machine stories.saver"
+with open(filename, mode='a+', newline='', encoding='utf-8') as file:
+    writer = csv.writer(file)
+    file.seek(0)
+    
+    try:
+        first_char = file.read(1)
+        if not first_char:
+            writer.writerow(["Class", "Name", "Story Number", "Passage"])
+    except Exception as e:
+        print(f"Error checking file content: {e}")
+        writer.writerow(["Class", "Name", "Story Number", "Passage"])
+
+    writer.writerow([class_name, name, number, story])
+
+    print(f"\n✅ Your story has been saved in '{filename}' yessir!")
