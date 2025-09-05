@@ -1,0 +1,29 @@
+import csv
+
+filename = "Shahzain's learning machine stories.saver"
+
+try:
+    with open(filename, mode='r', encoding='utf-8') as file:
+        reader = csv.DictReader(file)
+        stories = list(reader)
+
+        if not stories:
+            print("No stories found yet!")
+        else:
+            print("✅ Saved Mad Libs Stories:\n")
+            for i, story in enumerate(stories, start=1):
+                print(f"-- Story {i} --")
+
+                class_name = story.get('Class', 'N/A')
+                name = story.get('Name', 'N/A')
+                story_number = story.get('Story Number', 'N/A')
+                passage = story.get('Passage', 'N/A')
+
+                print(f"Class: {class_name}, Name: {name}, Story Number: {story_number}")
+                print(f"Passage: {passage}")
+                print("-" * 20)
+
+except FileNotFoundError:
+    print(f"⚠ File '{filename}' not found. Make sure you've saved some stories first!")
+except Exception as e:
+    print(f"An error occurred while reading the file: {e}")
